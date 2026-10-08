@@ -46,9 +46,15 @@ def main():
  import subprocess
  fact=json.loads(subprocess.check_output(['node','--input-type=module','-e',"import('./geography.mjs').then(m=>console.log(JSON.stringify(m.geography)))"],cwd=ROOT,text=True))
  selected=[];used=set()
+ city_anchors={('CR', 'San José'): (9.93388, -84.08489), ('VN', 'Hanoi'): (21.0245, 105.84117), ('US', 'Las Vegas'): (36.17497, -115.13722), ('US', 'Boston'): (42.35843, -71.05977), ('US', 'Miami'): (25.77427, -80.19366), ('US', 'San Diego'): (32.71571, -117.16472), ('US', 'Washington'): (38.89511, -77.03637), ('CA', 'Victoria'): (48.4359, -123.35155), ('MX', 'Mérida'): (20.967, -89.62318), ('PE', 'Cusco'): (-13.53188, -71.96701), ('CR', 'La Fortuna'): (10.47089, -84.64535), ('JP', 'Nagasaki'): (32.75, 129.88333), ('ID', 'Surabaya'): (-7.24917, 112.75083), ('ID', 'Bandung'): (-6.92222, 107.60694), ('IN', 'Udaipur'): (24.58584, 73.71346), ('IN', 'Jodhpur'): (26.26841, 73.00594), ('CN', 'Xi’an'): (34.25833, 108.92861), ('CN', 'Lijiang'): (26.86879, 100.22072), ('AU', 'Perth'): (-31.95224, 115.8614)}
  def add_city(code,name):
   matches=[(i,c) for i,c in enumerate(cities) if c['country']==code and fold(c['name'])==fold(name)]
   if not matches:return
+  if len(matches)>1:
+   anchor=next((point for (cc,nn),point in city_anchors.items() if cc==code and fold(nn)==fold(name)),None)
+   if anchor is None:raise ValueError('Ambiguous city requires a verified anchor: '+code+' '+name)
+   matches.sort(key=lambda item:(float(item[1]['lat'])-anchor[0])**2+(float(item[1]['lng'])-anchor[1])**2)
+   assert abs(float(matches[0][1]['lat'])-anchor[0])<.1 and abs(float(matches[0][1]['lng'])-anchor[1])<.1
   i,c=matches[0];key=(code,fold(c['name']))
   if key in used:return
   used.add(key);selected.append({'id':code+'-city-'+str(i),'code':code,'name':c['name'],'type':'city','parentId':code,'lat':float(c['lat']),'lon':float(c['lng']),'geoId':str(i),'sourceKey':'citiesjson'})
