@@ -1,19 +1,21 @@
 {
-  "version": "a2cd72aebc82",
+  "version": "89be6591b06b",
   "files": [
-    "assets/climate-data.e23aeab01478.mjs",
-    "assets/city-highlights.1800c8b0634c.mjs",
+    "assets/regional-heritage.34bd4e387794.mjs",
+    "assets/heritage-notes.4b2a954cad99.mjs",
+    "assets/seed-profiles.d977283463d9.mjs",
+    "assets/expanded-profiles.23a9843bfaa5.mjs",
+    "assets/heritage-data.1d497f137b81.mjs",
+    "assets/climate-data.2539fad1cccb.mjs",
     "assets/geography.6e255878cff0.mjs",
-    "assets/transport.582c88cecbf5.mjs",
-    "assets/catalog-model.9dc5a17140ff.mjs",
-    "assets/world-catalog.03cc4a6e55b5.mjs",
-    "assets/regional-catalog.c83b14a82617.mjs",
-    "assets/highlight-descriptions.bc2491211516.mjs",
-    "assets/data.938d891c7e3f.mjs",
-    "assets/search.0853ff99a2da.mjs",
-    "assets/state.a37c7b853a9a.mjs",
-    "assets/app.42deb86da847.mjs",
+    "assets/transport.a2ce0b49afba.mjs",
+    "assets/catalog-model.fd2c6ad07ade.mjs",
+    "assets/data.48b21aa6a688.mjs",
+    "assets/search.f2a242c677c1.mjs",
+    "assets/state.58480d24a19f.mjs",
+    "assets/app.7c1ff6139b04.mjs",
     "assets/update.8edc5fc9cedb.mjs",
-    "assets/style.8a47815dbaf3.css"
+    "assets/style.18c474dc9861.css",
+    "assets/geographic-index.7c753905fc47.json"
   ]
 }

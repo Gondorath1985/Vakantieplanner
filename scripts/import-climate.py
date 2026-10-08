@@ -2,7 +2,7 @@
 Requires archive-api.open-meteo.com in the environment network policy.
 This is reanalysis at reference coordinates, not a national mean or weather forecast.
 """
-import calendar, concurrent.futures, datetime, json, math, pathlib, subprocess, sys, urllib.parse, urllib.request, urllib.error
+import time, calendar, concurrent.futures, datetime, json, math, pathlib, subprocess, sys, urllib.parse, urllib.request, urllib.error
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 FIELDS = {'temp':'temperature_2m_mean','low':'temperature_2m_min','high':'temperature_2m_max','rain':'precipitation_sum','sun':'sunshine_duration'}
 
@@ -33,41 +33,59 @@ def summarize(payload, start_year=2015, end_year=2024):
 
 def main():
     ids=['VN-north','VN-central','VN-south','CO-bogota','CO-cartagena','ID-bali','GY','ST']
-    predicate="d.transport && !d.catalogOnly" if '--all' in sys.argv else json.dumps(ids)+".includes(d.id)"
-    command="import('./data.mjs').then(x=>console.log(JSON.stringify(x.destinations.filter(d=>"+predicate+").map(d=>({id:d.id,reference:d.climateReference,lat:d.transport.airport.lat,lon:d.transport.airport.lon})))));"
+    predicate="d.climatePoint && !['AQ','BV','HM','TF','GS','UM'].includes(d.code)" if '--all' in sys.argv else json.dumps(ids)+".includes(d.id)"
+    if '--countries' in sys.argv: predicate+=' && d.type===\"country\"'
+    if '--missing' in sys.argv: predicate+=' && !d.climateSource'
+    batch_size=1 if '--gentle' in sys.argv else 10
+    command="import('./data.mjs').then(x=>console.log(JSON.stringify(x.destinations.filter(d=>"+predicate+").map(d=>({id:d.id,reference:d.climateReference,...d.climatePoint})))));"
     points=json.loads(subprocess.check_output(['node','--input-type=module','-e',command],cwd=ROOT,text=True))
     imported=json.loads(subprocess.check_output(['node','--input-type=module','-e',"import('./climate-data.mjs').then(x=>console.log(JSON.stringify(x.climateData)))"],cwd=ROOT,text=True))
     groups={}
-    for point in points: groups.setdefault((point['lat'],point['lon']),[]).append(point)
-    failures=[]; failure_reasons={}; completed=0
-    def fetch(group):
-        point=group[0]
-        query=urllib.parse.urlencode({'latitude':point['lat'],'longitude':point['lon'],'start_date':'2015-01-01','end_date':'2024-12-31','daily':','.join(FIELDS.values()),'models':'era5','timezone':'auto'})
+    for point in points:
+        if not isinstance(point.get('lat'),(float,int)) or not isinstance(point.get('lon'),(float,int)): raise ValueError('Invalid coordinates')
+        groups.setdefault((point['lat'],point['lon']),[]).append(point)
+    failures={}; completed=0; batches=list(groups.values()); rate_limited=False
+    for offset in range(0,len(batches),batch_size):
+        batch=batches[offset:offset+batch_size]
+        query=urllib.parse.urlencode({'latitude':','.join(str(g[0]['lat']) for g in batch),'longitude':','.join(str(g[0]['lon']) for g in batch),'start_date':'2015-01-01','end_date':'2024-12-31','daily':','.join(FIELDS.values()),'models':'era5','timezone':'auto'})
         url='https://archive-api.open-meteo.com/v1/archive?'+query
-        with urllib.request.urlopen(url,timeout=45) as response: payload=json.load(response)
-        months=summarize(payload)
-        if not any(month['temp'] is not None for month in months): raise ValueError('No adequate temperature coverage')
-        source={'url':url,'provider':'Open-Meteo Historical Weather API / ERA5','period':'2015–2024','retrieved':datetime.date.today().isoformat(),'method':'Monthly mean daily temperatures; mean monthly precipitation sum; mean daily sunshine_duration in hours. At least 90% valid daily values per field/month; otherwise unknown. Reanalysis at reference coordinates, not country averages.','documentation':'https://open-meteo.com/en/docs/historical-weather-api','license':'CC BY 4.0; Copernicus ERA5 source attribution applies.'}
-        return group,months,source
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-        futures={pool.submit(fetch,group):group for group in groups.values()}
-        for future in concurrent.futures.as_completed(futures):
-            try:
-                group,months,source=future.result()
-                for point in group: imported[point['id']]={'reference':point['reference'],'months':months,'source':source}
-                completed+=1
-                if completed%10==0: print('Validated reference points:',completed,'of',len(groups),flush=True)
-            except Exception as error:
-                reason='HTTP '+str(error.code) if isinstance(error,urllib.error.HTTPError) else type(error).__name__
-                for point in futures[future]: failure_reasons[point['id']]=reason
-                failures.extend(p['id'] for p in futures[future]);print('Unavailable:',[p['id'] for p in futures[future]],reason,flush=True)
-                if isinstance(error,urllib.error.HTTPError) and error.code==429:
-                    for remaining in futures: remaining.cancel()
-                    print('Rate limit reached; pending requests cancelled. Existing data retained.',flush=True)
+        try:
+            for attempt in range(3):
+                try:
+                    with urllib.request.urlopen(url,timeout=55) as response: payload=json.load(response)
                     break
-    if not completed: raise ValueError('No new reference data imported; existing file retained')
-    (ROOT/'climate-import-report.json').write_text(json.dumps({'retrieved':datetime.date.today().isoformat(),'requestedProfiles':len(points),'uniqueReferencePoints':len(groups),'validatedReferencePoints':completed,'unavailableProfiles':failures,'failureReasons':failure_reasons,'retainedClimateProfiles':len(imported)},indent=2)+'\n')
-    # Atomic all-or-nothing: failures never replace retained verified data with empty values.
+                except urllib.error.HTTPError as error:
+                    body=error.read(500).decode(errors='replace')
+                    if error.code==429 and 'Minutely' in body and attempt<2:
+                        print('Provider minute limit: waiting 65 seconds before retrying this batch.',flush=True)
+                        time.sleep(65)
+                    else:
+                        raise ValueError('Provider HTTP '+str(error.code)+': '+body)
+            if not isinstance(payload,list): payload=[payload]
+            if len(payload)!=len(batch): raise ValueError('Location response count differs')
+            for group,record in zip(batch,payload):
+                point=group[0]
+                # ERA5 grid centers can differ; reject a swapped or unrelated reference location.
+                if abs(record['latitude']-point['lat'])>1 or abs((record['longitude']-point['lon']+180)%360-180)>1: raise ValueError('Reference location mismatch')
+                months=summarize(record)
+                if not any(month['temp'] is not None for month in months): raise ValueError('No adequate temperature coverage')
+                source={'url':url,'provider':'Open-Meteo Historical Weather API / ERA5','period':'2015–2024','retrieved':datetime.date.today().isoformat(),'coordinates':{'latitude':point['lat'],'longitude':point['lon']},'gridCoordinates':{'latitude':record['latitude'],'longitude':record['longitude']},'method':'Monthly mean daily temperatures; mean monthly precipitation sum; mean daily sunshine_duration in hours. At least 90% valid daily values per field/month; otherwise unknown. Reanalysis at reference coordinates, not country averages.','documentation':'https://open-meteo.com/en/docs/historical-weather-api','license':'CC BY 4.0; Copernicus ERA5 source attribution applies.'}
+                for item in group: imported[item['id']]={'reference':item['reference'],'months':months,'source':source}
+                completed+=1
+            print('Validated reference points:',completed,'of',len(batches),flush=True)
+        except Exception as error:
+            reason=('HTTP '+str(error.code)+': '+error.read(500).decode(errors='replace')) if isinstance(error,urllib.error.HTTPError) else type(error).__name__+': '+str(error)
+            for group in batch:
+                for point in group: failures[point['id']]=reason
+            print('Unavailable batch:',offset,reason,flush=True)
+            if 'HTTP 429' in reason:
+                rate_limited=True
+                for group in batches[offset+len(batch):]:
+                    for point in group: failures[point['id']]='Not requested: provider rate limit'
+                break
+        if '--gentle' in sys.argv: time.sleep(3)
+    (ROOT/'climate-import-report.json').write_text(json.dumps({'retrieved':datetime.date.today().isoformat(),'requestedProfiles':len(points),'uniqueReferencePoints':len(groups),'validatedReferencePoints':completed,'unavailableProfiles':list(failures),'failureReasons':failures,'rateLimited':rate_limited,'retainedClimateProfiles':len(imported)},indent=2)+'\n')
+    if not completed: raise ValueError('No new reference data imported; existing climate file retained')
     target=ROOT/'climate-data.mjs'; temporary=ROOT/'climate-data.pending.mjs'
     temporary.write_text('export const climateData = '+json.dumps(imported,ensure_ascii=False,allow_nan=False)+';\n')
     temporary.replace(target)

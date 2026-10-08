@@ -1,10 +1,10 @@
-import {regionalHeritage} from './regional-heritage.mjs';
-import {heritageNotes} from './heritage-notes.mjs';
-import {climateData} from './climate-data.mjs';
-import {geography,geographySource} from './geography.mjs';
-import {gatewayFor,daylightHours,distanceKm} from './transport.mjs';
-import {heritageSites,researchSources} from './heritage-data.mjs';
-import {expandedProfiles} from './expanded-profiles.mjs';
+import {regionalHeritage} from './regional-heritage.34bd4e387794.mjs';
+import {heritageNotes} from './heritage-notes.4b2a954cad99.mjs';
+import {climateData} from './climate-data.2539fad1cccb.mjs';
+import {geography,geographySource} from './geography.6e255878cff0.mjs';
+import {gatewayFor,daylightHours,distanceKm} from './transport.a2ce0b49afba.mjs';
+import {heritageSites,researchSources} from './heritage-data.1d497f137b81.mjs';
+import {expandedProfiles} from './expanded-profiles.23a9843bfaa5.mjs';
 const islands=new Set('ID-bali ID-lombok ID-gili-air ID-gili-meno ID-gili-trawangan ID-komodo ID-raja GR-crete GR-rhodes GR-corfu GR-naxos GR-paros GR-santorini US-hawaii-oahu US-hawaii-maui US-hawaii-kauai US-hawaii-big EC-galapagos PH-palawan CK-rarotonga CK-aitutaki SC-mahe SC-praslin SC-la-digue'.split(' '));
 const knownParents={'CA-admin-872':'CA-west','CA-admin-875':'CA-west','CA-admin-866':'CA-east','CA-admin-873':'CA-east','CA-admin-874':'CA-east','US-admin-1416':'US-west','US-admin-1436':'US-florida','US-admin-1452':'US-east','ID-admin-1826':'ID-bali'};
 const nonHoliday=new Set('AQ BV HM GS TF UM'.split(' '));

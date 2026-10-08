@@ -1,0 +1,28 @@
+{
+  "retrieved": "2026-10-08",
+  "successfulSources": [
+    "https://raw.githubusercontent.com/lutangar/cities.json/master/cities.json",
+    "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/json/states.json",
+    "https://raw.githubusercontent.com/simao-g/WorldHeritageApp/main/source_material/whc-sites-2024.xls",
+    "https://archive-api.open-meteo.com/v1/archive"
+  ],
+  "unavailablePrimarySources": {
+    "https://whc.unesco.org/en/list/xml/": "Network proxy tunnel 403",
+    "https://download.geonames.org/export/dump/cities15000.zip": "Network proxy tunnel 403; attributed GitHub mirror used",
+    "https://api.worldbank.org/v2/": "Network proxy tunnel 403; no forest statistics imported",
+    "https://www.klm.nl/vliegtickets/van-amsterdam-naar-sint-maarten": "Network proxy tunnel 403; no schedule or price imported",
+    "https://www.flightconnections.com/flights-from-amsterdam-ams": "Network proxy tunnel 403; no route claims imported",
+    "https://www.nederlandwereldwijd.nl/reisadvies/indonesie": "Network proxy tunnel 403; no advisory level imported"
+  },
+  "flightProviderBinding": "No configured flight-provider variable names or draft secret requirements found",
+  "climate": "Hourly limit reached after handling minute limits; 98 retained direct source profiles. Further import requires provider quota availability.",
+  "remainingUnknown": [
+    "Current fare quotations",
+    "Current flight/transfer timetables and stops",
+    "Verified mandatory boat duration",
+    "Accommodation/day prices",
+    "Current visa and entry conditions",
+    "Current safety/government classifications",
+    "Location-specific activity inventories beyond sourced heritage"
+  ]
+}
