@@ -16,7 +16,7 @@
     "https://www.nederlandwereldwijd.nl/reisadvies/indonesie": "Network proxy tunnel 403; no advisory level imported"
   },
   "flightProviderBinding": "No configured flight-provider variable names or draft secret requirements found",
-  "climate": "98 ERA5 references (2015\u20132024) plus 298 NASA POWER/MERRA-2 references (2001\u20132020). NASA sunshine remains unknown; precipitation mm/day converted using mean calendar month length.",
+  "climate": "398 source references. Mexico City, Merida, Cancun and Yucatan validated against ERA5 daily 2015\u20132024. Country cards show ranges of available unvisited reference climates, never national means. NASA fallback daily-average extrema remain unknown; raw extrema retained in source metadata.",
   "remainingUnknown": [
     "Current fare quotations",
     "Current flight/transfer timetables and stops",
