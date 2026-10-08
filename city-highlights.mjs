@@ -1,0 +1,22 @@
+const rows={
+ 'VN-hanoi':['Oude wijk~Handelsstraten en lokale eetgelegenheden rond historische stadswijken.','Hoàn Kiếm~Centraal meer met wandelruimte en culturele betekenis.','Tempel van de Literatuur~Historisch complex over Confuciaanse onderwijs- en cultuurtradities.'],
+ 'VN-hoian':['Oude handelsstad~Historische straten met Vietnamese, Chinese en Japanse invloeden.','Japanse brug~Karakteristiek monument uit de geschiedenis van de handelsgemeenschap.','Lokale keuken~Proef regionale gerechten en leer over ambachten en voedseltradities.'],
+ 'VN-saigon':['War Remnants Museum~Museum over oorlogsgeschiedenis dat zorgvuldige context vraagt.','Historische binnenstad~Architectuur en stadsleven rond oude en moderne gebouwen.','Lokale markten~Ontdek eettradities en de dynamiek van de grote stad.'],
+ 'AR-buenos-city':['San Telmo~Historische wijk met markten en tangocultuur.','Teatro Colón~Historisch theater met bijzondere architectuur.','Recoleta~Stadswijk met musea en historische begraafplaats.'],
+ 'BR-rio-city':['Suikerbroodberg~Uitzicht over de stad, baai en oceaan.','Tijuca~Bosrijk parkgebied binnen de stadsomgeving.','Historische wijken~Ontdek architectuur, muziek en lokale cultuur met passende context.'],
+ 'CO-bogota':['Goudmuseum~Museum over prekoloniaal metaalwerk en cultuur.','La Candelaria~Historische stadswijk met musea en architectuur.','Monserrate~Hooggelegen uitzichtpunt; houd rekening met hoogte en lokale omstandigheden.'],
+ 'CO-cartagena':['Oude stad~Ommuurde havenstad met historische gebouwen.','Getsemaní~Wijk met streetart en hedendaagse lokale cultuur.','Castillo San Felipe~Historische vesting met een belangrijke rol in de havenverdediging.'],
+ 'GY-georgetown':['St. George’s Cathedral~Groot houten kerkgebouw in de historische stad.','Stabroek Market~Marktgebied dat dagelijks stadsleven zichtbaar maakt.','Botanische tuin~Groene stadsruimte voor flora en natuurbezoek.'],
+ 'ST-city':['Historische stad~Kuststraten en gebouwen met Portugese en eilandinvloeden.','Lokale markten~Kennismaking met producten, eten en dagelijks eilandleven.','Nationaal museum~Historische collecties in een oud fortcomplex.'],
+ 'US-newyork':['Central Park~Groot stadspark met wandelpaden, meren en culturele plekken.','Metropolitan Museum~Kunstcollecties uit vele perioden en werelddelen.','Brooklyn Bridge~Historische brug met skyline-uitzichten.'],
+ 'US-washington':['National Mall~Monumenten en musea over Amerikaanse geschiedenis.','Smithsonian~Musea met collecties over cultuur, wetenschap en geschiedenis.','Georgetown~Historische straten en rivieromgeving.'],
+ 'CA-montreal':['Oud Montréal~Historische havenstraten en architectuur.','Mont Royal~Groen stadsgebied met uitzichtpunten.','Lokale eetwijken~Ontdek Franstalige en internationale eettradities.'],
+ 'JP-tokyo':['Asakusa~Historische tempelomgeving met handelsstraten.','Ueno~Park en musea voor cultuur en kunst.','Shibuya~Moderne stadswijk met winkels en levendig straatbeeld.'],
+ 'JP-kyoto':['Historische tempels~Religieuze architectuur en tuinen met plaatselijke bezoekregels.','Gion~Traditionele wijk; respecteer privacy en lokale fotografiebeperkingen.','Arashiyama~Rivier- en bergomgeving met wandelmogelijkheden.'],
+ 'TH-bangkok':['Grand Palace~Paleiscomplex met belangrijke religieuze en koninklijke geschiedenis.','Wat Pho~Tempelcomplex verbonden met traditionele massagegeschiedenis.','Lokale eetmarkten~Verken de diverse Thaise keuken en dagelijks stadsleven.'],
+ 'PT-lisbon':['Alfama~Oude wijk met steegjes, uitzichtpunten en lokale cultuur.','Belém~Historische monumenten die aan de Portugese zeevaart herinneren.','Stadsmusea~Collecties over kunst, geschiedenis en de stad.'],
+ 'ES-barcelona':['Sagrada Família~Monumentale kerk met Gaudí-architectuur.','Gotische wijk~Historische straten met verschillende bouwperioden.','Montjuïc~Musea en uitzichtpunten op een stadsheuvel.'],
+ 'FR-paris':['Louvre~Kunstmuseum met uitgebreide historische collecties.','Seineoevers~Stadswandelingen langs bruggen en monumenten.','Montmartre~Heuvelwijk met kunstgeschiedenis en stadsuitzichten.'],
+ 'IT-rome':['Forum Romanum~Archeologisch gebied met politieke en religieuze geschiedenis.','Colosseum~Antiek amfitheater met gereguleerde bezoektoegang.','Historische pleinen~Barokke architectuur en hedendaags stadsleven.']
+};
+export const cityHighlights=Object.fromEntries(Object.entries(rows).map(([id,items])=>[id,items.map(item=>{const [name,description]=item.split('~');return {name,description,kind:'Highlight'};})]));
