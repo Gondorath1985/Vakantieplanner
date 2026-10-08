@@ -77,3 +77,9 @@ scripts/import-research.py slaat bron-URL’s en inhoudschecksums op. LICENSE-DA
 ## Validatie
 
 28 Node-tests en 3 Python-tests: echte catalogusdekking, bronkoppelingen, scope/hiërarchie, afwezigheid van automatische schijngegevens, onzekerheidsbeleid, regionale uitsluitingen, maandlogica, routefilters, lange-reisadvies, persoonlijke scores, nabije klimaatreferenties en v5-migratie. Chromium is gecontroleerd op desktop/tablet/mobiel voor kaartklikken, broninformatie, bewaren/vergelijken, geo-zoekfunctie en lokale opslag, onbekende routes, reisduur, exports, importfouten, scrollpanelen en overflow.
+
+### Aanvullende klimaatbron
+
+`python3 scripts/import-nasa.py` vult ontbrekende landen-/regioreferenties aan met NASA POWER/MERRA-2-maandnormalen (2001–2020). Bestaande ERA5-reeksen blijven behouden. Regen in mm/dag wordt omgerekend naar een gemiddelde kalendermaand; zonneschijn blijft onbekend. Bron-URL, periode en coördinaten staan in elk record, mislukte aanvragen in `nasa-import-report.json`.
+
+Het percentage op kaarten is het gewogen aandeel ondersteunde interesses, niet een objectieve aanbod- of veiligheidsbeoordeling. Niet onderzochte interesses staan apart. Aanbodbanden worden bij bekende persoonlijke aanbodcijfers getoetst; onbekende cijfers leiden niet tot uitsluiting. Temperatuur is standaard uitgeschakeld als harde grens. Soedan en Jemen staan naast de eerdere uitsluitingen buiten aanbevelingen; de catalogus blijft compleet en bevat geen actuele veiligheidsclassificatie.

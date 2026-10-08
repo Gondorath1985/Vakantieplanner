@@ -4,7 +4,8 @@
     "https://raw.githubusercontent.com/lutangar/cities.json/master/cities.json",
     "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/json/states.json",
     "https://raw.githubusercontent.com/simao-g/WorldHeritageApp/main/source_material/whc-sites-2024.xls",
-    "https://archive-api.open-meteo.com/v1/archive"
+    "https://archive-api.open-meteo.com/v1/archive",
+    "https://power.larc.nasa.gov/api/temporal/climatology/point"
   ],
   "unavailablePrimarySources": {
     "https://whc.unesco.org/en/list/xml/": "Network proxy tunnel 403",
@@ -15,7 +16,7 @@
     "https://www.nederlandwereldwijd.nl/reisadvies/indonesie": "Network proxy tunnel 403; no advisory level imported"
   },
   "flightProviderBinding": "No configured flight-provider variable names or draft secret requirements found",
-  "climate": "Hourly limit reached after handling minute limits; 98 retained direct source profiles. Further import requires provider quota availability.",
+  "climate": "98 ERA5 references (2015\u20132024) plus 298 NASA POWER/MERRA-2 references (2001\u20132020). NASA sunshine remains unknown; precipitation mm/day converted using mean calendar month length.",
   "remainingUnknown": [
     "Current fare quotations",
     "Current flight/transfer timetables and stops",
