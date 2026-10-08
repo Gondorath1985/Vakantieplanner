@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const sources=['regional-heritage.mjs','heritage-notes.mjs','seed-profiles.mjs','expanded-profiles.mjs','heritage-data.mjs','climate-data.mjs','geography.mjs','transport.mjs','catalog-model.mjs','data.mjs','search.mjs','state.mjs','app.mjs','update.mjs'];
+const sources=['safety-data.mjs','regional-heritage.mjs','heritage-notes.mjs','seed-profiles.mjs','expanded-profiles.mjs','heritage-data.mjs','climate-data.mjs','geography.mjs','transport.mjs','catalog-model.mjs','data.mjs','search.mjs','state.mjs','app.mjs','update.mjs'];
 const content=Object.fromEntries(await Promise.all([...sources,'style.css','index.template.html'].map(async name=>[name,await readFile(path.join(root,name),'utf8')])));
 const hash=text=>createHash('sha256').update(text).digest('hex').slice(0,12);
 const geo=await readFile(path.join(root,'geographic-index.json'),'utf8');

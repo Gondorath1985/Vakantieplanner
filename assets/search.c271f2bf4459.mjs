@@ -1,5 +1,5 @@
-import {safetyData} from './safety-data.mjs';
-import {regionalHeritage} from './regional-heritage.mjs';
+import {safetyData} from './safety-data.66a331221c9d.mjs';
+import {regionalHeritage} from './regional-heritage.34bd4e387794.mjs';
 export function selectedMonths(f){return [...new Set((Array.isArray(f.months)?f.months:[f.month||1]).map(Number).filter(m=>Number.isInteger(m)&&m>=1&&m<=12))].sort((a,b)=>a-b);}
 export function priceTrip(){return null;} // No verified date-/party-specific quotations are connected.
 export function excluded(d,f,all=[]){const ids=new Set(f.visitedRegions||[]);if((f.visited||[]).includes(d.code)||ids.has(d.id)||ids.has(d.parentId))return true;if(d.type!=='country'&&Number.isFinite(d.climatePoint?.lat)&&Number.isFinite(d.climatePoint?.lon))for(const id of ids){const a=travelAreas[id],p=d.climatePoint;if(a?.code===d.code&&p.lat>=a.south&&p.lat<=a.north&&p.lon>=a.west&&p.lon<=a.east)return true;}let parent=all.find(x=>x.id===d.parentId);while(parent){if(ids.has(parent.id))return true;parent=all.find(x=>x.id===parent.parentId);}return false;}

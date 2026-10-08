@@ -89,3 +89,15 @@ Continenten zijn meervoudig selecteerbaar; Buiten Europa is een snelkeuze die ve
 ### Regionaal klimaat op landenkaarten
 
 Een landenkaart toont de spreiding tussen beschikbare, niet uitgesloten referentieplekken voor de geselecteerde maand, geen nationaal gemiddelde. Klimaatfilters zoeken een passende lokale referentie per maand. De details tonen plaats, bron en periode, naast de volledige maandreeks van de hoofdreferentie. Mexico-Stad, Mérida, Cancún en de Yucatán-referentie zijn opnieuw onderbouwd met ERA5-dagreeksen 2015–2024; bron-URL’s staan in de records. De NASA-fallback houdt gemiddelde temperatuur en regen, maar toont de niet als gemiddelde dagelijkse extrema geverifieerde minima/maxima niet onder die labels. Originele extrema blijven bewaard bij de bronmetadata.
+
+### Zoekscore en gemengde vakanties
+
+De zoekscore combineert de interesse-indicatie met de gewogen aansluiting op **bekende** ingevulde klimaat-/reisgrenzen en vakantiecomponenten. De interesse-indicatie wordt vermenigvuldigd met de filteraansluiting: een overschrijding verhoogt dus nooit de score. Binnen dezelfde toegestane band blijft de aansluiting gelijk. Onbekende prijzen, routes en aanbodcijfers leveren geen bevestiging of afwijzing op; de interface toont deze beperkingen in ‘Effect van je filters’. Een ingevulde temperatuurgrens wordt automatisch aangezet en kan apart weer worden uitgezet.
+
+Vakantiecomponenten zijn positieve prioriteiten: relevante interesses krijgen minimaal belang 9. Een niet gekozen actieve vakantie verbiedt geen losse activiteit. Dagtempo is een aparte keuze. Bij lange reizen naar één compacte plek geeft afwisseling/actief tempo 10 punten combinatieaftrek; een bewust rustige reis krijgt die aftrek niet. Voor een component geeft een bekende profielindeling volledige aansluiting, indirecte interessebronnen 50%, ontbrekende informatie blijft onbekend.
+
+### Veiligheidsselectie
+
+`python3 scripts/import-safety.py` verzamelt controleerbare kleurcodeverklaringen uit de introducties van officiële NederlandWereldwijd-reisadviezen, met URL, datum, oorspronkelijke wijzigings-/geldigheidsdatum en SHA-256. `--missing` probeert alleen nog ongecontroleerde landen. Rood/oranje blokkeert aanbevelingen, ook bij gemengde landen met risicogebieden. Dit is bewust een conservatieve **landenselectie**, geen geverifieerde kaart van veilige deelregio’s. Onbekend of ouder dan 30 dagen wordt standaard niet aanbevolen; optioneel kan onbekend herkenbaar worden meegenomen. Een snapshot is geen live garantie: controleer vóór boeken het actuele officiële advies. De volledige geografische catalogus blijft toegankelijk.
+
+Pakistan, Syrië, Bahrein, Oman, Mongolië, Iran, Irak en Jordanië worden daarnaast als persoonlijke voorkeur vooraf uitgesloten, aanpasbaar via de landenlijst. Een eigen uitsluiting wordt niet als officiële kleurcode gepresenteerd; Mongolië heeft in de gecontroleerde bron geel. Een hoge zoekscore kan nooit een veiligheidsuitsluiting opheffen.
