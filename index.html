@@ -1,9 +1,41 @@
-<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Vakantiekompas — vind jouw bestemming</title><link rel="stylesheet" href="style.css"></head><body>
+<!doctype html>
+<html lang="nl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vakantiekompas — vind jouw bestemming</title><link rel="stylesheet" href="style.css"></head>
+<body>
 <header><a href="./" class="brand">✺ Vakantiekompas</a><span>Van wensen naar mogelijkheden</span></header>
-<main><section class="hero"><p class="eyebrow">DE WERELD, OP JOUW VOORWAARDEN</p><h1>Waar gaat jullie<br>volgende reis heen?</h1><p>Vertel wat jullie belangrijk vinden. Ontdek bestemmingen die bij jullie passen en vergelijk de mogelijkheden.</p></section>
-<div class="notice"><strong>Werkend prototype met voorbeeldgegevens.</strong> De scores, temperaturen en kosten van 12 bestemmingen zijn illustratief, niet geverifieerd en niet geschikt als reisadvies. Alle 249 ISO-landen en gebieden zijn beschikbaar in de landenlijst. Actuele maandgegevens, politieke informatie, veiligheid en ticketprijzen zijn nog niet gekoppeld.</div>
-<div class="layout"><aside><form id="filters"><section class="panel"><h2>01 <span>Jullie reis</span></h2><label>Regio<select id="region"><option value="">Alle regio’s</option><option>Europa</option><option>Azië</option><option>Afrika</option><option>Amerika</option><option>Oceanië</option></select></label><label>Aantal reizigers<input id="people" type="number" min="1" max="20" value="2" required></label><label>Totaalbudget voor 3 weken (€)<input id="budget" type="number" min="0" step="100" value="6000" required></label><p class="hint">Voorbeeld: verblijfskosten voor jullie samen + een retourvlucht per persoon. Geen live prijsberekening.</p><div class="pair"><label>Min. temperatuur °C<input id="minTemp" type="number" min="-50" max="60" value="5" required></label><label>Max. temperatuur °C<input id="maxTemp" type="number" min="-50" max="60" value="35" required></label></div><p class="hint">Illustratieve temperatuur; nog geen filter per reismaand.</p></section>
-<section class="panel"><h2>02 <span>Wat maakt jullie blij?</span></h2><p class="hint">0 = niet belangrijk · 10 = heel belangrijk</p><div id="sliders"></div></section>
-<section class="panel"><h2>03 <span>Al ontdekt</span></h2><label>Zoek een bezocht land<input id="countrySearch" type="search" placeholder="Bijvoorbeeld Frankrijk"></label><div id="countries" class="countries"></div><p class="hint" id="visitedCount"></p><button type="button" id="clearVisited" class="secondary">Bezochte landen wissen</button></section><button class="primary" type="submit">Vind mijn bestemmingen ↗</button><p id="error" role="alert"></p></form></aside>
-<section class="results"><div class="resultHeader"><div><p class="eyebrow">JOUW SHORTLIST</p><h2>Een wereld aan mogelijkheden</h2></div><span id="count" role="status"></span></div><p class="hint">Overeenkomst is een gewogen voorkeursscore, geen kans of kwaliteitsgarantie. Landen zonder voorbeeldprofiel komen nog niet in zoekresultaten.</p><div id="cards"></div><p class="hint">Voorkeuren en bezochte landen worden alleen in deze browser opgeslagen. <button id="reset" class="textButton">Alles herstellen</button></p></section></div></main>
-<dialog id="detail"><button id="close" class="close" aria-label="Sluiten">×</button><div id="detailBody"></div></dialog><footer>Vakantiekompas · Ruimte voor een goed geïnformeerde keuze</footer><script type="module" src="app.mjs"></script></body></html>
+<main>
+<section class="hero"><p class="eyebrow">DE WERELD, OP JOUW VOORWAARDEN</p><h1>Een reis die écht<br>bij jullie past.</h1><p>Van Bali tot Oost-Canada: ontdek specifieke bestemmingen, vergelijk de kosten per persoon en zie welke mogelijkheden nét buiten je wensen vallen.</p></section>
+<details class="notice"><summary><strong>Over de informatie: planningsprototype met voorbeeldramingen</strong></summary><p id="dataNote"></p><p>Alle ISO-landen en gebieden zijn beschikbaar voor uitsluiting; alleen de uitgewerkte profielen hebben zoekresultaten. Veiligheid, regeringskleur en staatsvorm zijn nog niet geverifieerd. Deze gegevens worden als onbekend weergegeven en tellen niet mee in de score.</p></details>
+<nav class="mobileNav" aria-label="Snel navigeren"><a href="#filters">Filters aanpassen</a><a href="#results">Bekijk resultaten ↓</a></nav>
+<div class="layout">
+<aside><form id="filters">
+<section class="panel"><h2>01 <span>Jullie reis</span></h2>
+<label>Waar willen jullie heen?<select id="region"><option value="">Overal</option><option value="outsideEurope">Buiten Europa</option><option>Europa</option><option>Azië</option><option>Afrika</option><option>Amerika</option><option>Oceanië</option></select></label>
+<div class="pair"><label>Reizigers<input id="people" type="number" min="1" max="20" step="1" value="2" required></label><label>Reisdagen<input id="days" type="number" min="1" max="90" step="1" value="21" required></label></div>
+<label>Budget per persoon, inclusief vlucht (€)<input id="budget" type="number" min="0" max="100000" step="1" value="3000" required></label>
+<label>Personen per kamer<select id="occupancy" required><option value="1">1 — eigen kamer</option><option value="2" selected>2 — tweepersoonskamer</option><option value="3">3 — gedeelde kamer</option><option value="4">4 — familie-/gedeelde kamer</option></select></label>
+<p class="hint">Kosten worden berekend uit daguitgaven per persoon, gedeelde kamers en een retourvlucht. Raming vanaf Nederland, geen live tarieven. Een kamer heeft in dit model een vaste voorbeeldprijs.</p>
+<label>Reismaand<select id="month" required></select></label><label class="check"><input type="checkbox" id="bestOnly"> Alleen aanbevolen reisperiode</label>
+</section>
+<section class="panel"><h2>02 <span>Klimaat dat bij je past</span></h2>
+<div class="pair"><label>Min. gemiddeld °C<input id="minTemp" type="number" min="-50" max="60" value="5" required></label><label>Max. gemiddeld °C<input id="maxTemp" type="number" min="-50" max="60" value="35" required></label></div>
+<div class="pair"><label>Max. regen mm/maand<input id="maxRain" type="number" min="0" max="2000" value="350" required></label><label>Min. zon uur/dag<input id="minSun" type="number" min="0" max="24" step="0.5" value="0" required></label></div><p class="hint">Filters gebruiken de voorbeeldcurve voor de gekozen maand. In details vind je alle 12 maanden, inclusief lage en hoge temperatuur.</p>
+</section>
+<section class="panel"><h2>03 <span>Wat maakt jullie blij?</span></h2><p class="hint">0 = niet belangrijk · 10 = heel belangrijk. Rust en levendigheid kun je afzonderlijk wegen.</p><div id="sliders"></div></section>
+<section class="panel"><h2>04 <span>Hier zijn we al geweest</span></h2><p class="hint">Vink een heel land aan om alles uit te sluiten, of alleen een regio/eiland. Bali sluit Java niet uit.</p><label>Zoek land, regio of eiland<input id="countrySearch" type="search" placeholder="Bali, Canada, Kreta…"></label><div id="countries" class="countries"></div><p class="hint" id="visitedCount"></p><div id="visitedTags" class="tags"></div><button type="button" id="clearVisited" class="secondary">Bezochte plekken wissen</button></section>
+<button class="primary" type="submit">Vind mijn bestemmingen ↗</button><p id="error" role="alert"></p>
+</form></aside>
+<section class="results" id="results">
+<div class="resultHeader"><div><p class="eyebrow">JOUW SHORTLIST</p><h2>Een wereld aan mogelijkheden</h2></div><span id="count" role="status"></span></div>
+<p class="hint" id="tripSummary"></p><p class="hint">Match is een gewogen score op je interesses. Een hoge score zegt niets over veiligheid of actuele beschikbaarheid.</p>
+<div id="cards"></div>
+<section id="nearSection"><h2>Net buiten je wensen</h2><p class="hint">Deze suggesties missen hooguit twee filters en liggen dicht bij je grenswaarden. Je ziet precies waarom. Bezochte plekken en uitgesloten regio’s blijven uitgesloten.</p><div id="nearCards"></div></section>
+<section id="savedSection"><h2>Zelf bewaren & vergelijken <span id="savedCount"></span></h2><p class="hint">Bewaren verandert je filters niet. Je kunt ook een bijna-passende bestemming toevoegen.</p><div id="savedCards"></div></section>
+<p class="hint">Alles wordt alleen in deze browser opgeslagen. <button id="reset" class="textButton">Alles herstellen</button></p>
+</section>
+</div>
+</main>
+<dialog id="detail"><button id="close" class="close" aria-label="Sluiten">×</button><div id="detailBody"></div></dialog>
+<footer>Vakantiekompas · Ruimte voor een goed geïnformeerde keuze</footer>
+<script type="module" src="app.mjs"></script>
+</body></html>
