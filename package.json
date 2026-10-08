@@ -1,1 +1,10 @@
-{"name":"vakantieplanner","version":"0.1.0","private":true,"scripts":{"start":"python3 -m http.server 3000 --bind 0.0.0.0","test":"node --test tests/*.test.mjs"}}
+{
+  "name": "vakantieplanner",
+  "version": "0.3.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run build && python3 -m http.server 3000 --bind 0.0.0.0",
+    "test": "node --test tests/*.test.mjs",
+    "build": "node scripts/build.mjs"
+  }
+}
